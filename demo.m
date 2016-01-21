@@ -4,7 +4,10 @@
 % Released for research purposes only. If you use this software you must
 % cite the above paper!
 % 
-%
+% This method also uses a third party GraphCut library:
+% http://vision.csd.uwo.ca/code/
+% If you use this you have to cite their works as well! Please refer to the
+% webpage for thge most up to date information.
 
 %% parameters
 vidFn = './data/vid1.MP4';
