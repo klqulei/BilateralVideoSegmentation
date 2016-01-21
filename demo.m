@@ -10,8 +10,8 @@
 % webpage for thge most up to date information.
 
 %% parameters
-vidFn = './data/vid1.MP4';
-maskFn = '';
+vidFn = './data/chair.mp4';
+maskFn = './data/mask.png';
 maskFrame = 1;
 
 intensityGridSize = 35;
