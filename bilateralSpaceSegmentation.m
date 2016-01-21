@@ -7,3 +7,7 @@ vid = read(vidReader);
 
 %% lifting
 
+%% graph cut
+addpath('GCmex2.0');
+
+%% splatting
