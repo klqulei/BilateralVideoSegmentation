@@ -13,6 +13,8 @@ mask = imresize(mask,.25);
 f = 100;
 vid=vid(:,:,:,1:f);
 
+vid = imresize(vid,.25);
+
 %% Lifting (3.1)
 bilateralData = lift(vid,gridSize);
 maskData = lift(mask,gridSize);
