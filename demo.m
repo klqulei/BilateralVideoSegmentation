@@ -37,18 +37,19 @@ params.colorMode = 'ntsc';
 params.medianFilterRefinement = true;
 params.pairwiseWeight = 1;
 params.unaryWeight = 100000;
-params.temporalWeight = 0.999;
-params.intensityWeight = 0.05;
-params.colorWeight = 0.03;
-params.spatialWeight = 0.3;
-params.minGraphWeight = 0.01;
-params.connectAllComponents = false;
-params.splatFirstFrameGT = true;
+temporalWeight = 0.999;
+intensityWeight = 0.05;
+colorWeight = 0.03;
+spatialWeight = 0.3;
+minGraphWeight = 0.01;
+connectAllComponents = false;
+splatFirstFrameGT = true;
 
-
+dimensionWeights = [colorWeight, colorWeight, colorWeight, spatialWeight, spatialWeight, temporalWeight];
+gridSize = [intensityGridSize chromaGridSize chromaGridSize spatialGridSize spatialGridSize temporalGridSize];
 
 %% run video segmentation
-segmentation = bilateralSpaceSegmentation(vidFn,maskFn,maskFrame,intensityGridSize,chromaGridSize,spatialGridSize,temporalGridSize);
+segmentation = bilateralSpaceSegmentation(vidFn,maskFn,maskFrame,gridSize,dimsionWeights);
 
 %% visualize result
 implay(segmentation);

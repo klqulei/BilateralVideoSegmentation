@@ -1,5 +1,5 @@
 % splat bilateral data to the bilateral grid
-function bilateralGrid = splat(bilateralData,gridSize)
+function splatted = splat(bilateralData,pointValues,gridSize)
 
 nDims = length(gridSize);
 nPoints = size(bilateralData,1);
