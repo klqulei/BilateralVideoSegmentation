@@ -1,55 +1,23 @@
 % splat bilateral data to the bilateral grid
-function splatted = splat(bilateralData,pointValues,gridSize)
+function [occupiedVertices, occupiedVertexWeights, vidIndices, vidWeights, splattedMask] = splat(bilateralData,maskData,maskValues,gridSize)
 
-nDims = length(gridSize);
-nPoints = size(bilateralData,1);
+[~,nDims] = size(bilateralData);
 nPotentialVertices = prod(gridSize);
+nClasses = size(maskValues,2);
 
-% get ceil/floor for linear interpolation
-floors = floor(bilateralData);
-ceils = ceil(bilateralData);
-remainders = bilateralData - floors;
+[maskIndices,maskWeights] = bilinearSplat(maskData,gridSize);
 
-% create sparse matrix by adding weights to all neighboring vertices
-% each neighboring vertex is a combination of floor or ceil in each
-% dimension
-sp_i = zeros(2^nDims*(nPoints),1);
-sp_v = zeros(2^nDims*(nPoints),1);
-for i=1:2^nDims
-    % use the binary representation as floor (0) and ceil (1)
-    bin = dec2bin(i-1,nDims);
-    
-    weights = ones(nPoints,1);
-    % multiply weights for each dimension
-    for j=1:nDims
-        if bin(j)=='0' % floor
-            weights = weights .* (1-remainders(:,j));
-            if j==1
-                indices = floors(:,j);
-            else
-                indices = indices + prod(gridSize(1:j-1)).*(floors(:,j)-1);
-            end
-            
-        else % ceil
-            weights = weights .* remainders(:,j);
-            if j==1
-                indices = ceils(:,j);
-            else
-                indices = indices + prod(gridSize(1:j-1)).*(ceils(:,j)-1);
-            end
-            
-        end
-    end       
-    sp_i((i-1)*nPoints+1:i*nPoints) = indices;
-    sp_v((i-1)*nPoints+1:i*nPoints) = weights;
+splattedMask = zeros(nPotentialVertices, size(maskValues,2));
+for i=1:nClasses
+    values = repmat(maskValues(:,i), 2^nDims, 1);
+    splattedMask(:,i) = accumarray(maskIndices(:),maskWeights(:) .* values,[nPotentialVertices,1], @sum, 0);
 end
 
+[vidIndices,vidWeights] = bilinearSplat(bilateralData,gridSize);
 
-splatted = zeros(nPotentialVertices, size(pointValues,2));
-for i=1:size(pointValues,2)
-    values = repmat(pointValues(:,i), 2^nDims, 1);
-    splatted(:,i) = accumarray(sp_i,sp_v .* values,[nPotentialVertices,1], @sum, 0);
-end
+occupiedVertexWeights = accumarray(vidIndices(:),vidWeights(:),[prod(gridSize), 1]);
+occupiedVertices = find(occupiedVertexWeights);
+occupiedVertexWeights = occupiedVertexWeights(occupiedVertices);
 
 end
 

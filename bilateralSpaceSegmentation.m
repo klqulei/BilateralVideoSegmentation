@@ -1,14 +1,13 @@
-function segmentation = bilateralSpaceSegmentation(vid,mask,maskFrame,gridSize,dimensionWeights,unaryWeight,pairwiseWeight)
+function segmentation = bilateralSpaceSegmentation(vid,mask,maskFrames,gridSize,dimensionWeights,unaryWeight,pairwiseWeight)
 [h,w,~,f] = size(vid);
 
 %% Lifting (3.1)
 bilateralData = lift(vid,gridSize);
-bilateralMask = lift(vid(:,:,:,maskFrame),gridSize,maskFrame);
+bilateralMask = lift(vid(:,:,:,maskFrames),gridSize,maskFrames);
 maskValues = cat(2,mask(:)~=0.,mask(:)==0);
 
 %% Splatting (3.2)
-[occupiedVertices, occupiedVertexWeights, vidIndices, vidWeigths] = splatVideo(bilateralData, gridSize);
-splattedMask = splat(bilateralMask,maskValues,gridSize);
+[occupiedVertices, occupiedVertexWeights, vidIndices, vidWeigths, splattedMask] = splat(bilateralData, bilateralMask,maskValues, gridSize);
 
 %% Graph Cut (3.3)
 labels = graphcut(occupiedVertices,occupiedVertexWeights,splattedMask,gridSize,dimensionWeights,unaryWeight,pairwiseWeight);
