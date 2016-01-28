@@ -1,9 +1,8 @@
-function labels = graphcut(bilateralData,splattedValues,gridSize,dimensionWeights)
+function labels = graphcut(existing,existingVertexWeights,splattedValues,gridSize,dimensionWeights,unaryWeight,pairwiseWeight)
+
+addpath('GCMex2.0');
 
 minGraphWeight = 0.01;
-
-% Determine the non-zero vertices of the grid
-[existing, allIndices, allWeights, existingVertexWeights] = existingVertices(bilateralData, gridSize);
 
 splattedValues = splattedValues(existing, :);
 
@@ -13,13 +12,12 @@ A = createAdjacencyMatrix(gridSize, 0, 1, existing, dimensionWeights, double(exi
 % splattedCost = [splattedCost; zeros(size(A,1)-size(splattedCost,1),2)];
 
 % Solve GraphCut
-gch = GraphCut('open', splattedCost'*params.unaryWeight, [0,1;1,0]*params.pairwiseWeight, A);
+gch = GraphCut('open', splattedValues'*unaryWeight, [0,1;1,0]*pairwiseWeight, A);
 [gch, L] = GraphCut('expand',gch);
 [gch, smoothnessEnergy, dataEnergy] = GraphCut('energy', gch);
-disp(['smoothnessEnergy: ' num2str(smoothnessEnergy) ...
-    ', dataEnergy: ' num2str(dataEnergy)]);
+%disp(['smoothnessEnergy: ' num2str(smoothnessEnergy)', dataEnergy: ' num2str(dataEnergy)]);
 GraphCut('close', gch);
 
 % L = max(splattedCost(:,2), splattedCost(:,1));
-allL = zeros(prod(params.gridSize),1);
-allL(existing) = L;
+labels = zeros(prod(gridSize),1);
+labels(existing) = L;

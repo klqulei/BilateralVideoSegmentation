@@ -1,28 +1,21 @@
-function segmentation = bilateralSpaceSegmentation(vidFn,maskFn,maskFrame,gridSize,dimensionWeights)
-
-%% init
-vidReader = VideoReader(vidFn);
-vid = read(vidReader);
+function segmentation = bilateralSpaceSegmentation(vid,mask,maskFrame,gridSize,dimensionWeights,unaryWeight,pairwiseWeight)
 [h,w,~,f] = size(vid);
-mask = imread(maskFn);
-
-%for debugging, smaller video
-vid = imresize(vid,.25);
-mask = rgb2gray(im2double(imresize(mask,.25)));
-f = 100;
-vid=vid(:,:,:,1:f);
 
 %% Lifting (3.1)
 bilateralData = lift(vid,gridSize);
-bilateralMask = lift(vid(:,:,:,maskFrame),gridSize);
-maskValues = cat(2,mask(:)==0.,mask(:)~=0);
+bilateralMask = lift(vid(:,:,:,maskFrame),gridSize,maskFrame);
+maskValues = cat(2,mask(:)~=0.,mask(:)==0);
 
 %% Splatting (3.2)
+[occupiedVertices, occupiedVertexWeights, vidIndices, vidWeigths] = splatVideo(bilateralData, gridSize);
 splattedMask = splat(bilateralMask,maskValues,gridSize);
 
 %% Graph Cut (3.3)
-addpath('GCmex2.0');
-labels = graphcut(bilateralData,splattedMask,gridSize,dimensionWeights);
+labels = graphcut(occupiedVertices,occupiedVertexWeights,splattedMask,gridSize,dimensionWeights,unaryWeight,pairwiseWeight);
 
 %% Splicing (3.4)
-segmentation = slice(bilateralGrid,bilateralData);
+sliced = slice(labels,vidIndices,vidWeigths);
+
+%% visualize output
+segmentation = reshape(sliced,[h,w,f]);
+%implay(segmentation);

@@ -1,13 +1,13 @@
 % This function lifts data to [y,u,v,x,y,t] bilateral space
 %
-function bilateralData = lift(vid,gridsize)
+function bilateralData = lift(vid,gridsize,frames)
 
 [h,w,~,f] = size(vid);
 numDims = 6;
 bilateralData = zeros([h*w*f, numDims], 'single');
 
 %% add color features
-colors = reshape(im2double(vid),[h*w*f 3]);
+colors = reshape(im2double(permute(vid,[1 2 4 3])),[h*w*f 3]);
 colors = rgb2ntsc(colors); 
 bilateralData(:,1:3) = colors;
 clear colors;
@@ -20,7 +20,11 @@ bilateralData(:,4) = Y(:);
 bilateralData(:,5) = X(:);
 
 %% add temporal features
-bilateralData(:,6) = repelem(1:f, w*h);
+if ~exist('frames','var')
+    bilateralData(:,6) = repelem(1:f, w*h);
+else
+    bilateralData(:,6) = repelem(frames, w*h);
+end
     
 %% scale to grid size
 eps = 0.001;

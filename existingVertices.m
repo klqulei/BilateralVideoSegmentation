@@ -1,5 +1,4 @@
-
-function [vertexIndices,allIndices,allWeights,existingVertexWeights] = existingVertices(bilateralData,gridSize)
+function [occupiedVertices, occupiedVertexWeights, vidIndices, vidWeigths] = splatVideo(bilateralData, gridSize);
     
     [nPoints, dim] = size(bilateralData);
 
@@ -11,8 +10,8 @@ function [vertexIndices,allIndices,allWeights,existingVertexWeights] = existingV
     % create sparse matrix by adding weights to all neighboring vertices
     % each neighboring vertex is a combination of floor or ceil in each
     % dimension
-    allIndices = zeros(nPoints,2^dim, 'uint32');
-    allWeights = zeros(nPoints,2^dim, 'single');
+    vidIndices = zeros(nPoints,2^dim, 'uint32');
+    vidWeights = zeros(nPoints,2^dim, 'single');
     indices = zeros(nPoints,1, 'uint32');
     for i=1:2^dim
         % use the binary representation as floor (0) and ceil (1)
@@ -41,11 +40,11 @@ function [vertexIndices,allIndices,allWeights,existingVertexWeights] = existingV
             end
         end
 
-        allIndices(:,i) = indices;
-        allWeights(:,i) = weights;
+        vidIndices(:,i) = indices;
+        vidWeights(:,i) = weights;
     end
 
-    existingVertexWeights = accumarray(allIndices(:),allWeights(:),[prod(gridSize), 1]);
-    vertexIndices = find(existingVertexWeights);
-    existingVertexWeights = existingVertexWeights(vertexIndices);  
+    occupiedVertexWeights = accumarray(vidIndices(:),vidWeights(:),[prod(gridSize), 1]);
+    occupiedVertices = find(occupiedVertexWeights);
+    occupiedVertexWeights = occupiedVertexWeights(occupiedVertices);  
 end
