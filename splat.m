@@ -24,6 +24,7 @@ nClasses = size(maskValues,2);
 % splat the mask
 [maskIndices,maskWeights] = nlinearSplat(maskData,gridSize);
 
+% accumulate mask weights on bilateral vertices
 splattedMask = zeros(nPotentialVertices, size(maskValues,2),'double');
 for i=1:nClasses
     values = repmat(maskValues(:,i), 2^nDims, 1);
@@ -33,8 +34,10 @@ end
 % splat the video
 [vidIndices,vidWeights] = nlinearSplat(bilateralData,gridSize);
 
-% record only the vertices that are used by the video
+% accumulate video weights on bilateral vertices
 occupiedVertexWeights = accumarray(vidIndices(:),vidWeights(:),[prod(gridSize), 1]);
+
+% keep only occupied vertices
 occupiedVertices = find(occupiedVertexWeights);
 occupiedVertexWeights = occupiedVertexWeights(occupiedVertices);
 
@@ -44,6 +47,7 @@ end
 function [vidIndices, vidWeights] = nlinearSplat(bilateralData,gridSize)
 
 [nPoints,nDims] = size(bilateralData);
+computeWeights = nargout==2;
 
 % get ceil/floor for n-linear interpolation
 floors = floor(bilateralData);
@@ -54,7 +58,9 @@ remainders = bilateralData - floors;
 % each neighboring vertex is a combination of floor or ceil in each
 % dimension
 vidIndices = zeros(nPoints,2^nDims,'uint32');
-vidWeights = zeros(nPoints,2^nDims,'double');
+if computeWeights
+    vidWeights = zeros(nPoints,2^nDims,'double');
+end
 for i=1:2^nDims
     % use the binary representation as floor (0) and ceil (1)
     bin = dec2bin(i-1,nDims);
@@ -63,7 +69,9 @@ for i=1:2^nDims
     % multiply weights for each dimension
     for j=1:nDims
         if bin(j)=='0' % floor
-            weights = weights .* (1-remainders(:,j));
+            if computeWeights
+                weights = weights .* (1-remainders(:,j));
+            end
             if j==1
                 indices = floors(:,j);
             else
@@ -71,7 +79,9 @@ for i=1:2^nDims
             end
             
         else % ceil
-            weights = weights .* remainders(:,j);
+            if computeWeights
+                weights = weights .* remainders(:,j);
+            end
             if j==1
                 indices = ceils(:,j);
             else
@@ -81,7 +91,9 @@ for i=1:2^nDims
         end
     end
     vidIndices(:,i) = indices;
-    vidWeights(:,i) = weights;
+    if computeWeights
+        vidWeights(:,i) = weights;
+    end
 end
 end
 

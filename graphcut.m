@@ -74,6 +74,10 @@ for i=find(dimensionWeights)
     wLeft = occupiedVertexWeights(leftCenterIndices) + occupiedVertexWeights(leftIndices);
     wRight = occupiedVertexWeights(rightCenterIndices) + occupiedVertexWeights(rightIndices);
     
+    %% disable the pairwise weights (S# in Eq. 8). With these off splatting the entire video is not necessary
+    wLeft = 1;
+    wRight = 1;
+    
     %% Construct sparse matrix
     sp_i = [leftCenterIndices; rightCenterIndices];
     sp_j = [leftIndices; rightIndices];

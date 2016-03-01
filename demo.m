@@ -20,12 +20,12 @@ maskFn = {'./data/ducks/ducks01_0001_gt.ppm',...
           './data/ducks/ducks01_0400_gt.ppm'};
 maskFrames = [1,100,200,300,400];
 
-vidFn = './data/bear/bear.mp4';
-maskFn = {'./data/bear/bear01_0001_gt.ppm',...
-          './data/bear/bear01_0040_gt.ppm',...
-          './data/bear/bear01_0080_gt.ppm',...
-          './data/bear/bear01_0100_gt.ppm'};
-maskFrames = [1,40,80,100];
+% vidFn = './data/bear/bear.mp4';
+% maskFn = {'./data/bear/bear01_0001_gt.ppm',...
+%           './data/bear/bear01_0040_gt.ppm',...
+%           './data/bear/bear01_0080_gt.ppm',...
+%           './data/bear/bear01_0100_gt.ppm'};
+% maskFrames = [1,40,80,100];
 
 % Grid parameters
 intensityGridSize = 35;
@@ -46,9 +46,9 @@ minGraphWeight = 0.001;
 threshold = .2;
 
 %for debugging, smaller video
-timescale = 1;
+maxtime = 100;
 scale = .5;
-speedscale = 1;
+speedscale = 2;
 
 dimensionWeights = [colorWeight, colorWeight, colorWeight, spatialWeight, spatialWeight, temporalWeight];
 gridSize = [intensityGridSize chromaGridSize chromaGridSize spatialGridSize spatialGridSize temporalGridSize];
@@ -56,7 +56,7 @@ gridSize = [intensityGridSize chromaGridSize chromaGridSize spatialGridSize spat
 %% load video
 vidReader = VideoReader(vidFn);
 vid = read(vidReader);
-f = round(size(vid,4)/timescale);
+f = max(maxtime,size(vid,4));
 vid=vid(:,:,:,1:speedscale:f);
 vid = imresize(vid,scale);
 [h,w,~,f] = size(vid);
@@ -74,9 +74,9 @@ disp(['Segmentation took ' num2str(endtime/f) 's per frame']);
 
 %% postprocess video
 segmentation = uint8(255*segmentation);
-segmentation = imerode(segmentation,strel('disk',5));
-segmentation = imdilate(segmentation,strel('disk',5));
+%segmentation = imerode(segmentation,strel('disk',5));
+%segmentation = imdilate(segmentation,strel('disk',5));
 
 %% visualize result
 segmentation = reshape(segmentation,[h,w,1,f]);
-implay([segmentation(:,:,[1 1 1],:) vid]);
+h2 = implay([segmentation(:,:,[1 1 1],:) vid]);
