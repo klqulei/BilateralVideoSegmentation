@@ -1,5 +1,17 @@
-% This function lifts data to [y,u,v,x,y,t] bilateral space
+% Bilateral Space Video Segmentation
+% CVPR 2016
+% Nicolas Maerki, Oliver Wang, Federico Perazzi, Alexander Sorkine-Hornung
+% 
+% This is a personal reimplementation of the method described in the above paper.
+% The code is released for research purposes only. If you use this software you must
+% cite the above paper!
 %
+% Read the README.txt before proceeding. 
+%
+% This is a simplified, unoptimized version of our paper. It only performs
+% one task, which is to propagate a mask over a video. 
+
+% This function lifts data to [y,u,v,x,y,t] bilateral space
 function bilateralData = lift(vid,gridsize,frames)
 
 [h,w,~,f] = size(vid);
@@ -19,7 +31,7 @@ X = repmat(X(:),[1 f]);
 bilateralData(:,4) = Y(:);
 bilateralData(:,5) = X(:);
 
-%% add temporal features
+%% add temporal features. Can take sparse frame numbers or it just assumes sequential frames
 if ~exist('frames','var')
     bilateralData(:,6) = repelem(1:f, w*h);
 else
