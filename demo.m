@@ -20,17 +20,17 @@ maskFn = {'./data/ducks/ducks01_0001_gt.ppm',...
           './data/ducks/ducks01_0400_gt.ppm'};
 maskFrames = [1,100,200,300,400];
 
-% vidFn = './data/bear/bear.mp4';
-% maskFn = {'./data/bear/bear01_0001_gt.ppm',...
-%           './data/bear/bear01_0040_gt.ppm',...
-%           './data/bear/bear01_0080_gt.ppm',...
-%           './data/bear/bear01_0100_gt.ppm'};
-% maskFrames = [1,40,80,100];
+vidFn = './data/bear/bear.mp4';
+maskFn = {'./data/bear/bear01_0001_gt.ppm',...
+          './data/bear/bear01_0040_gt.ppm',...
+          './data/bear/bear01_0080_gt.ppm',...
+          './data/bear/bear01_0100_gt.ppm'};
+maskFrames = [1,40,80,100];
 
 % Grid parameters
-intensityGridSize = 35;
-chromaGridSize = 20;
-spatialGridSize = 20;
+intensityGridSize = 15;
+chromaGridSize = 10;
+spatialGridSize = 10;
 temporalGridSize = 5;
 
 % Graph Cut Parameters

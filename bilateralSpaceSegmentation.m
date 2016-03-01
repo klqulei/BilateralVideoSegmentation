@@ -15,20 +15,39 @@
 function segmentation = bilateralSpaceSegmentation(vid,mask,maskFrames,gridSize,dimensionWeights,unaryWeight,pairwiseWeight)
 [h,w,~,f] = size(vid);
 
+
 %% Lifting (3.1)
 bilateralData = lift(vid,gridSize);
 bilateralMask = lift(vid(:,:,:,maskFrames),gridSize,maskFrames);
 maskValues = cat(2,mask(:)~=0.,mask(:)==0);
+[nPoints,~] = size(bilateralData);
 
 %% Splatting (3.2)
-[occupiedVertices, occupiedVertexWeights, vidIndices, vidWeigths, splattedMask] = splat(bilateralData, bilateralMask, maskValues, gridSize);
-clear bilateralData;
-clear bilateralMask;
+tic;
+splattedMask = nlinearSplat2(bilateralMask, maskValues, gridSize);
+splattedData = nlinearSplat2(bilateralData, ones(size(nPoints,1)), gridSize);
+
+occupiedVertices = find(splattedData);
+splattedData = splattedData(occupiedVertices);
+%clear bilateralData;
+%clear bilateralMask;
 %% Graph Cut (3.3)
-labels = graphcut(occupiedVertices, occupiedVertexWeights, splattedMask, gridSize, dimensionWeights, unaryWeight, pairwiseWeight);
+labels = graphcut(occupiedVertices, splattedData, splattedMask, gridSize, dimensionWeights, unaryWeight, pairwiseWeight);
 
 %% Splicing (3.4)
-sliced = slice(labels,vidIndices,vidWeigths);
+sliced = slice2(labels,bilateralData,gridSize);
 
 %% reshape output
 segmentation = reshape(sliced,[h,w,f]);
+
+toc;
+
+%% second
+tic;
+[occupiedVertices, splattedData, vidWeights, vidIndices, splattedMask] = splat(bilateralData,bilateralMask,maskValues,gridSize);
+labels = graphcut(occupiedVertices, splattedData, splattedMask, gridSize, dimensionWeights, unaryWeight, pairwiseWeight);
+sliced = slice(labels,vidIndices,vidWeights);
+segmentation2 = reshape(sliced,[h,w,f]);
+toc;
+
+disp('done');
