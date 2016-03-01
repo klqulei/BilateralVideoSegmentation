@@ -12,39 +12,49 @@
 % one task, which is to propagate a mask over a video.
 
 %%
-% Splat bilateral data to the bilateral grid.  Note: this function splats both
-% the mask and the video into bilateral space.
-function [occupiedVertices, occupiedVertexWeights, vidWeights, vidIndices, splattedMask] = splat(data,maskData,maskValues,gridSize)
+function [splattedData] = splat(bilateralData,bilateralVals,gridSize)
 
-[nPoints,nDims] = size(data);
+[nPoints,nDims] = size(bilateralData);
 nPotentialVertices = prod(gridSize);
-nClasses = size(maskValues,2);
+nClasses = size(bilateralVals,2);
 
-% splat the mask
-%splattedMask = nlinearSplat2(maskData,maskValues,gridSize);
+% get ceil/floor for n-linear interpolation
+floors = floor(bilateralData);
+ceils = ceil(bilateralData);
+remainders = bilateralData - floors;
 
-[maskIndices,maskWeights] = nlinearSplat(maskData,gridSize);
+% accumulate splat values on bilateral grid
+splattedData = zeros(nPotentialVertices, nClasses,'double');
 
-%
-%accumulate mask weights on bilateral vertices
-splattedMask = zeros(nPotentialVertices, size(maskValues,2),'double');
-for i=1:nClasses
-    values = repmat(maskValues(:,i), 2^nDims, 1);
-    splattedMask(:,i) = accumarray(maskIndices(:),maskWeights(:) .* values,[nPotentialVertices,1], @sum, 0);
+for i=1:2^nDims
+    % use the binary representation as floor (0) and ceil (1)
+    bin = dec2bin(i-1,nDims);
+    
+    weights = ones(nPoints,1);
+    
+    % multiply weights for each dimension
+    for j=1:nDims
+        if bin(j)=='0' % floor
+                weights = weights .* (1-remainders(:,j));
+            if j==1
+                indices = floors(:,j);
+            else
+                indices = indices + prod(gridSize(1:j-1)).*(floors(:,j)-1);
+            end
+            
+        else % ceil
+                weights = weights .* remainders(:,j);
+            if j==1
+                indices = ceils(:,j);
+            else
+                indices = indices + prod(gridSize(1:j-1)).*(ceils(:,j)-1);
+            end
+            
+        end
+    end
+    
+    for c=1:nClasses    
+        accumData = accumarray(indices,weights .* bilateralVals(:,c),[nPotentialVertices,1], @sum);        
+        splattedData(:,c) = splattedData(:,c) + accumData;
+    end
 end
-
-
-% splat the video
-%occupiedVertexWeights = nlinearSplat2(data,,gridSize);
-
-[vidIndices,vidWeights] = nlinearSplat(data,gridSize);
-% accumulate video weights on bilateral vertices
-occupiedVertexWeights = accumarray(vidIndices(:),vidWeights(:),[prod(gridSize), 1]);
-occupiedVertices = find(occupiedVertexWeights);
-occupiedVertexWeights = occupiedVertexWeights(occupiedVertices);
-% keep only occupied vertices
-
-
-end
-
-

@@ -20,17 +20,17 @@ maskFn = {'./data/ducks/ducks01_0001_gt.ppm',...
           './data/ducks/ducks01_0400_gt.ppm'};
 maskFrames = [1,100,200,300,400];
 
-vidFn = './data/bear/bear.mp4';
-maskFn = {'./data/bear/bear01_0001_gt.ppm',...
-          './data/bear/bear01_0040_gt.ppm',...
-          './data/bear/bear01_0080_gt.ppm',...
-          './data/bear/bear01_0100_gt.ppm'};
-maskFrames = [1,40,80,100];
+% vidFn = './data/bear/bear.mp4';
+% maskFn = {'./data/bear/bear01_0001_gt.ppm',...
+%           './data/bear/bear01_0040_gt.ppm',...
+%           './data/bear/bear01_0080_gt.ppm',...
+%           './data/bear/bear01_0100_gt.ppm'};
+% maskFrames = [1,40,80,100];
 
 % Grid parameters
-intensityGridSize = 15;
-chromaGridSize = 10;
-spatialGridSize = 10;
+intensityGridSize = 35;
+chromaGridSize = 20;
+spatialGridSize = 20;
 temporalGridSize = 5;
 
 % Graph Cut Parameters
@@ -46,9 +46,9 @@ minGraphWeight = 0.001;
 threshold = .2;
 
 %for debugging, smaller video
-maxtime = 100;
-scale = .5;
-speedscale = 2;
+maxtime = 400;
+scale = 1;
+speedscale = 1;
 
 dimensionWeights = [colorWeight, colorWeight, colorWeight, spatialWeight, spatialWeight, temporalWeight];
 gridSize = [intensityGridSize chromaGridSize chromaGridSize spatialGridSize spatialGridSize temporalGridSize];

@@ -12,17 +12,19 @@
 % one task, which is to propagate a mask over a video.
 
 %%
-function labels = graphcut(occupiedVertices, occupiedVertexWeights, splattedMask, gridSize, dimensionWeights, unaryWeight, pairwiseWeight)
+function labels = graphcut(splattedData, splattedMask, gridSize, dimensionWeights, unaryWeight, pairwiseWeight)
 
 %% init
 addpath('GCMex2.0');
 debugPrintout = 0;
 
 %% get only the vertices that will be sliced
+occupiedVertices = find(splattedData);
+splattedData = splattedData(occupiedVertices);
 splattedMask = splattedMask(occupiedVertices, :);
 
 %% Build pairwise cost matrix
-A = createAdjacencyMatrix(gridSize, occupiedVertices, double(occupiedVertexWeights), dimensionWeights);
+A = createAdjacencyMatrix(gridSize, occupiedVertices, double(splattedData), dimensionWeights);
 
 %% Solve GraphCut
 gch = GraphCut('open', splattedMask'*unaryWeight, [0,1;1,0]*pairwiseWeight, A);
@@ -75,8 +77,8 @@ for i=find(dimensionWeights)
     wRight = occupiedVertexWeights(rightCenterIndices) + occupiedVertexWeights(rightIndices);
     
     %% disable the pairwise weights (S# in Eq. 8). With these off splatting the entire video is not necessary
-    wLeft = 1;
-    wRight = 1;
+    % wLeft = 1;
+    % wRight = 1;
     
     %% Construct sparse matrix
     sp_i = [leftCenterIndices; rightCenterIndices];
