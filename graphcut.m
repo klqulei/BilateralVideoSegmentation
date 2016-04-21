@@ -76,7 +76,8 @@ for i=find(dimensionWeights)
     wLeft = occupiedVertexWeights(leftCenterIndices) + occupiedVertexWeights(leftIndices);
     wRight = occupiedVertexWeights(rightCenterIndices) + occupiedVertexWeights(rightIndices);
     
-    %% disable the pairwise weights (S# in Eq. 8). With these off splatting the entire video is not necessary
+    %% disable the pairwise weights (S# in Eq. 8). 
+    % With these off pre-splatting the entire video is not necessary, and you can just splat the mask
     % wLeft = 1;
     % wRight = 1;
     
