@@ -12,10 +12,9 @@ All code provide here is to be used for **research purposes only**. For question
 
 Note: If you use this software, you *must* cite the following work: 
 
-    N. Maerki, O. Wang, H. Zimmer, M. Grosse and A. Sorkine-Hornung
     Bilateral Space Video Segmentation
+    Nicolas Maerki, Federico Perazzi, Oliver Wang, Alexander Sorkine-Hornung
     2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)
-
 
 ###GRAPHCUT
 
