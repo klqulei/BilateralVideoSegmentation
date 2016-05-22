@@ -3,9 +3,9 @@
 >By [Oliver Wang](http://www.oliverwang.info)  
 oliver.wang2@gmail.com
 
-This is a *personal* reimplementation based on the publication *Bilateral Space Video Segmentation* [Maerki et al. 2016]. 
-In particular, it only partially implements method described in the above paper, featuring only multi-linear interpolation. 
-Furthermore, it is written for clarity of understanding, and is totally unoptimized (i.e. IT'S SLOW and uses a LOT of memory).
+This is a *personal* reimplementation of the method proposed in *Bilateral Space Video Segmentation* [Maerki et al. 2016]. 
+Importantly, it was written for clarity of understanding, and is totally unoptimized (i.e. IT'S SLOW and uses a LOT of memory).
+Furthermore, it only partially implements the published method, featuring only multi-linear interpolation. 
 For realistic timing and results to compare against, please refer to the material included in the original publication. 
 
 All code provide here is to be used for **research purposes only**. For questions regarding commercial use, including licensing rights and IP, you must contact the owner; The Walt Disney Company.
