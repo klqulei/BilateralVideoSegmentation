@@ -10,7 +10,7 @@ For realistic timing and results to compare against, please refer to the materia
 
 All code provide here is to be used for **research purposes only**. For questions regarding commercial use, including licensing rights and IP, you must contact the owner; The Walt Disney Company.
 
-Note: If you use this software, you should cite the following work: 
+Note: If you use this software, please cite the following work: 
 
     Bilateral Space Video Segmentation
     Nicolas Maerki, Federico Perazzi, Oliver Wang, Alexander Sorkine-Hornung
