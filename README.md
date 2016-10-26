@@ -18,13 +18,11 @@ Note: If you use this software, please cite the following work:
 
 ###GRAPHCUT
 
-This method also uses a third party [GraphCut library](http://vision.csd.uwo.ca/code/).
-If you use this you have to cite their works as well! Please refer to the
+This method also uses a third party [GraphCut library](http://vision.csd.uwo.ca/code/). Please refer to the
 webpage for the most up to date information.
 
 ###DATA
 
 The datasets included originate from the [FBMS-59 dataset](http://lmb.informatik.uni-freiburg.de/resources/datasets/).
-The datasets are provided only for research purposes and without any warranty. 
-Any commercial use is prohibited. When using the BMS-26 or FBMS-59 in your 
+The datasets are provided only for research purposes and without any warranty. When using the BMS-26 or FBMS-59 in your 
 research work, you should cite the appropriate papers in the link above.
