@@ -39,15 +39,15 @@ unaryWeight = 100000;
 temporalWeight = 1e5;
 intensityWeight = 0.05;
 colorWeight = 0.03;
-spatialWeight = 0.3;
+spatialWeight = 0.35;
 minGraphWeight = 0.001;
 
 % Display parameters
 threshold = .2;
 
-%for debugging, smaller video
+%If you run out of memory, try a smaller video
 maxtime = 400;
-scale = 1;
+scale = 0.5;
 speedscale = 1;
 
 dimensionWeights = [colorWeight, colorWeight, colorWeight, spatialWeight, spatialWeight, temporalWeight];
