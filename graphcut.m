@@ -72,9 +72,9 @@ for i=find(dimensionWeights)
     [~, leftIndices, leftCenterIndices] = intersect(leftIndices, occupiedVertices);
     [~, rightIndices, rightCenterIndices] = intersect(rightIndices, occupiedVertices);
     
-    %% weight for an edge is the sum of the vertex weights
-    wLeft = occupiedVertexWeights(leftCenterIndices) + occupiedVertexWeights(leftIndices);
-    wRight = occupiedVertexWeights(rightCenterIndices) + occupiedVertexWeights(rightIndices);
+    %% weight for an edge is the product of the vertex weights
+    wLeft = occupiedVertexWeights(leftCenterIndices) .* occupiedVertexWeights(leftIndices);
+    wRight = occupiedVertexWeights(rightCenterIndices) .* occupiedVertexWeights(rightIndices);
     
     %% disable the pairwise weights (S# in Eq. 8). 
     % With these off pre-splatting the entire video is not necessary, and you can just splat the mask
