@@ -29,7 +29,7 @@ maskFrames = [1,100,200,300,400];
 
 % Grid parameters
 intensityGridSize = 35;
-chromaGridSize = 20;
+chromaGridSize = 15;
 spatialGridSize = 20;
 temporalGridSize = 5;
 
@@ -45,9 +45,9 @@ minGraphWeight = 0.001;
 % Display parameters
 threshold = .2;
 
-%for debugging, smaller video
-maxtime = 400;
-scale = 1;
+%If you run out of memory, try a smaller video
+maxtime = 200;
+scale = .75;
 speedscale = 1;
 
 dimensionWeights = [colorWeight, colorWeight, colorWeight, spatialWeight, spatialWeight, temporalWeight];
