@@ -24,7 +24,7 @@ ceils = ceil(bilateralData);
 remainders = bilateralData - floors;
 
 % accumulate splat values on bilateral grid
-splattedData = zeros(nPotentialVertices, nClasses,'double');
+splattedData = zeros(nPotentialVertices, nClasses,'single');
 
 for i=1:2^nDims
     % use the binary representation as floor (0) and ceil (1)
