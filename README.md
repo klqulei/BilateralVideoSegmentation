@@ -16,13 +16,16 @@ Note: If you use this software, please cite the following work:
     Nicolas Maerki, Federico Perazzi, Oliver Wang, Alexander Sorkine-Hornung
     2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)
 
-###GRAPHCUT
+### GRAPHCUT
 
 This method also uses a third party [GraphCut library](http://vision.csd.uwo.ca/code/). Please refer to the
 webpage for the most up to date information.
 
-###DATA
+### DATA
 
 The datasets included originate from the [FBMS-59 dataset](http://lmb.informatik.uni-freiburg.de/resources/datasets/).
 The datasets are provided only for research purposes and without any warranty. When using the BMS-26 or FBMS-59 in your 
 research work, you should cite the appropriate papers in the link above.
+
+### C++ Implementation
+Scott Wehrwein implemented a version of BVS in C++ for his project on foreground/background segmentation. You can find it [here](https://github.com/swehrwein/vsbmm).
